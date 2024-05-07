@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import '../css/main.css';
-import '../assets/holberton-logo.jpg';
+import '../images/holberton-logo.jpg';
 
 $(document).ready(function() {
     $('body').prepend('<div id="logo"></div>');
