@@ -1,4 +1,3 @@
-#!/usr/bin/node
 import $ from 'jquery';
 
 const paragraphs = [
