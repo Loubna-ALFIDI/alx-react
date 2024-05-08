@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import ReactDOM from 'react-dom'; // Correct import statement
+import './Notifications.css';
 import App from './App';
 import Notifications from './Notifications';
 import reportWebVitals from './reportWebVitals';
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,6 +16,5 @@ const rootNotification = ReactDOM.createRoot(document.getElementById('root-notif
 rootNotification.render(
   <React.StrictMode>
     <Notifications />
-  </React.StrictMode>,
-  document.getElementById('root-notifications')
+  </React.StrictMode>
 );
