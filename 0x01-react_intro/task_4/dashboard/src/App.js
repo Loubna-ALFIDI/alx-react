@@ -11,10 +11,10 @@ function App() {
             <h1>School dashboard</h1>
           </div>
           <div className="App-body"> 
-            <p>Login to access the full dashboard</p>
-            <label htmlFor="email">Email:</label>
+            <p><b>Login to access the full dashboard</b></p>
+            <label htmlFor="email"><b>Email: </b></label>
             <input type="text" id="email" name="email"></input>
-            <label htmlFor="password">Password:</label>
+            <label htmlFor="password"><b> Password: </b></label>
             <input type="password" id="password" name="password"></input>
             <button style={{
                   background: "transparent",
