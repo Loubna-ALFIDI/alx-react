@@ -15,20 +15,23 @@ module.exports = {
     hints: false,
     maxEntrypointSize: 1000000,
   },
-  plugins: [ new CleanWebpackPlugin(), new HtmlWebpackPlugin() ],
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: './index.html',
+      filename: 'index.html',
+    }),
+  ],
   optimization: {
     splitChunks: {
       chunks: 'all',
     },
   },
   devServer: {
-    static: {
-        directory: path.join(__dirname, 'public'),
-    },
-    compress: true,
+    contentBase: path.join(__dirname, 'public'),
     port: 8564,
-},
-
+    compress: true,
+  },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'public'),
@@ -37,17 +40,17 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
-          "file-loader",
+          'file-loader',
           {
-            loader: "image-webpack-loader",
+            loader: 'image-webpack-loader',
             options: {
-              bypassOnDebug: true, // webpack@1.x
-              disable: true, // webpack@2.x and newer
+              bypassOnDebug: true,
+              disable: true,
             },
           },
         ],
