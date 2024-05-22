@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, css } from "aphrodite";
+import "./Notifications.css";
 import closeIcon from "../assets/close-icon.png";
 import NotificationItem from "./NotificationItem";
 import PropTypes from "prop-types";
 import NotificationItemShape from "./NotificationItemShape";
+import { StyleSheet, css } from "aphrodite";
 
 class Notifications extends Component {
   static propTypes = {
@@ -29,21 +30,27 @@ class Notifications extends Component {
     return (
       <div className={css(styles.placing)}>
         {displayDrawer ? (
-          <div className={css(styles.notifications)}>
-            <div className={css(styles.menuItem)}>Your notifications</div>
+          <div className={css(styles.NotificationSyle)}>
+            
             <button
-              className={css(styles.closeButton)}
+              style={{
+                position: "absolute",
+                top: 20,
+                right: 15,
+                border: "none",
+                background: "transparent",
+              }}
               aria-label="Close"
               onClick={() => {
                 console.log("Close button has been clicked");
               }}
             >
-              <img src={closeIcon} alt="close-icon" className={css(styles.closeIcon)} />
+              <img src={closeIcon} alt="close-icon" width={"10px"} />
             </button>
             <p>Here is the list of notifications</p>
             <ul>
               {listNotifications && listNotifications.length > 0 ? (
-                listNotifications.map((val) => (
+                listNotifications.map((val, idx) => (
                   <NotificationItem
                     key={val.id}
                     type={val.type}
@@ -67,33 +74,20 @@ class Notifications extends Component {
 }
 
 const styles = StyleSheet.create({
-  placing: {
-    position: 'relative',
-  },
-  notifications: {
-    border: '2px dashed #e1484c',
+  NotificationSyle: {
+    border: '1px dashed #c1384c',
     padding: '10px',
+    width: '400px',
+  },
+
+  placing: {
     position: 'absolute',
-    top: '30px',
-    right: '0',
-    width: '300px',
-    backgroundColor: 'white',
-    zIndex: 100,
+    top: '0',
+    right: '10px',
   },
   menuItem: {
-    textAlign: 'right',
-    cursor: 'pointer',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 20,
-    right: 15,
-    border: 'none',
-    background: 'transparent',
-  },
-  closeIcon: {
-    width: '10px',
-  },
-});
+    textAlign: 'end',
+  }
+})
 
 export default Notifications;

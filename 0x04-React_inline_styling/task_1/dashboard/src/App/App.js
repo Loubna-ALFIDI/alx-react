@@ -1,50 +1,88 @@
-import React from "react";
-import CourseListRow from "./CourseListRow";
-import PropType from 'prop-types';
-import { StyleSheet, css } from 'aphrodite';
-import CourseShape from "./CourseShape";
+import React, { Component } from "react";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import Login from "../Login/Login";
+import Notifications from "../Notifications/Notifications";
+import PropTypes from "prop-types";
+import CourseList from "../CourseList/CourseList";
+import { getLatestNotification } from "../utils/utils";
+import BodySectionWithMarginBottom from "../BodySection/BodySectionWithMarginBottom";
+import BodySection from "../BodySection/BodySection";
+import { StyleSheet, css } from "aphrodite";
 
-const CourseList = ({ listCourses }) => {
-  return (
-    <table className={css(styles.courseList)}>
-      <thead>
-        <CourseListRow textFirstCell="Available courses" isHeader={true} />
-        <CourseListRow
-          textFirstCell="Course name"
-          textSecondCell="Credit"
-          isHeader={true}
-        />
-      </thead>
-      <tbody>
-        {listCourses.length > 0 ? (
-          <>
-            {listCourses.map((course) => (
-              <CourseListRow key={course.id} textFirstCell={course.name} textSecondCell={course.credit} />
-            ))}
-          </>
-        ) : (
-          <CourseListRow textFirstCell="No course available yet" />
-        )}
-      </tbody>
-    </table>
-  );
-};
+const listCourses = [
+  { id: 1, name: "ES6", credit: 60 },
+  { id: 2, name: "Webpack", credit: 20 },
+  { id: 3, name: "React", credit: 40 },
+];
 
-CourseList.propTypes = {
-  listCourses: PropType.arrayOf(CourseShape),
-};
-
-CourseList.defaultProps = {
-  listCourses: [],
-};
+const listNotifications = [
+  { id: 1, type: "default", value: "New course available" },
+  { id: 2, type: "urgent", value: "New resume available" },
+  { id: 3, type: "urgent", html: getLatestNotification() },
+];
 
 const styles = StyleSheet.create({
-  courseList: {
-    width: '100%',
-    border: '1px solid #ddd',
-    borderCollapse: 'collapse',
-    margin: '20px 0',
+  App: {
+    fontFamily: "Arial",
+    padding: "10px",
+    position: "relative",
+    minHeight: "100vh",
   },
 });
 
-export default CourseList;
+class App extends Component {
+  static propTypes = {
+    isLoggedIn: PropTypes.bool,
+    logOut: PropTypes.func,
+  };
+  static defaultProps = {
+    isLoggedIn: false,
+    logOut: () => {},
+  };
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.keydownEvent);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.keydownEvent);
+  }
+
+  keydownEvent = (e) => {
+    if (e.ctrlKey && e.key === "h") {
+      alert("Logging you out");
+      this.props.logOut();
+    }
+  };
+
+  render() {
+    const { isLoggedIn } = this.props;
+    return (
+      <div className={css(styles.App)}>
+        <Notifications listNotifications={listNotifications} />
+        <Header />
+        {isLoggedIn ? (
+          <BodySectionWithMarginBottom title="Course list">
+            <CourseList listCourses={listCourses} />
+          </BodySectionWithMarginBottom>
+        ) : (
+          <BodySectionWithMarginBottom title="Log in to continue">
+            <Login />
+          </BodySectionWithMarginBottom>
+        )}
+        <BodySection title="News from the School">
+          <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+        </BodySection>
+        <Footer />
+      </div>
+    );
+  }
+}
+
+export default App;
