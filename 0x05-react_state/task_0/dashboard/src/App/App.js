@@ -1,35 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Login from "../Login/Login";
-import Notifications from "../Notifications/Notifications";
-import PropTypes from "prop-types";
 import CourseList from "../CourseList/CourseList";
-import { getLatestNotification } from "../utils/utils";
+import Notifications from "../Notifications/Notifications";
 import BodySectionWithMarginBottom from "../BodySection/BodySectionWithMarginBottom";
 import BodySection from "../BodySection/BodySection";
 import { StyleSheet, css } from "aphrodite";
+import PropTypes from "prop-types";
+import { getLatestNotification } from "../utils/utils";
 
-
-
-const styles = StyleSheet.create({
-  App: {
-    fontFamily: "Arial",
-    padding: "10px",
-    position: "relative",
-    minHeight: "100vh",
-  },
-});
-
-class App extends Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      displayDrawer: false
-    };
+
+    this.state = { displayDrawer: false };
+
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
-    this.keydownEvent = this.keydownEvent.bind(this);
   }
 
   listCourses = [
@@ -44,73 +33,84 @@ class App extends Component {
     { id: 3, type: "urgent", html: getLatestNotification() },
   ];
 
-
-
-  handleDisplayDrawer() {
-    this.setState({
-      displayDrawer: true
-    })
-  }
-
-  handleHideDrawer() {
-    this.setState({
-      displayDrawer: false
-    })
-  }
-
-  componentDidMount() {
-    document.addEventListener("keydown", this.keydownEvent);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.keydownEvent);
-  }
-
-  keydownEvent = (e) => {
+  handleKeyPress(e) {
     if (e.ctrlKey && e.key === "h") {
+      e.preventDefault();
       alert("Logging you out");
       this.props.logOut();
     }
-  };
+  }
+
+  handleDisplayDrawer() {
+    this.setState({ displayDrawer: true });
+  }
+
+  handleHideDrawer() {
+    this.setState({ displayDrawer: false });
+  }
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeyPress);
+  }
 
   render() {
     return (
-      <div className={css(styles.App)}>
-        <Notifications listNotifications={this.listNotifications}
-          displayDrawer={this.state.displayDrawer}
-          handleDisplayDrawer={this.handleDisplayDrawer}
-          handleHideDrawer={this.handleHideDrawer} />
-        <Header />
-        {this.props.isLoggedIn ? (
-          <BodySectionWithMarginBottom title="Course list">
-            <CourseList listCourses={this.listCourses} />
-          </BodySectionWithMarginBottom>
-        ) : (
-          <BodySectionWithMarginBottom title="Log in to continue">
-            <Login />
-          </BodySectionWithMarginBottom>
-        )}
-        <BodySection title="News from the School">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-        </BodySection>
-        <Footer />
-      </div>
+      <React.Fragment>
+        <div className={css(styles.App)}>
+          <div className="heading-section">
+            <Notifications
+              listNotifications={this.listNotifications}
+              displayDrawer={this.state.displayDrawer}
+              handleDisplayDrawer={this.handleDisplayDrawer}
+              handleHideDrawer={this.handleHideDrawer}
+            />
+            <Header />
+          </div>
+          {this.props.isLoggedIn ? (
+            <BodySectionWithMarginBottom title="Course list">
+              <CourseList listCourses={this.listCourses} />
+            </BodySectionWithMarginBottom>
+          ) : (
+            <BodySectionWithMarginBottom title="Log in to continue">
+              <Login />
+            </BodySectionWithMarginBottom>
+          )}
+          <BodySection title="News from the school">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis at tempora odio, necessitatibus repudiandae reiciendis cum nemo sed asperiores ut molestiae eaque aliquam illo ipsa
+              iste vero dolor voluptates.
+            </p>
+          </BodySection>
+          <Footer />
+        </div>
+      </React.Fragment>
     );
   }
 }
 
+const styles = StyleSheet.create({
+  App: {
+    height: "100vh",
+    maxWidth: "100vw",
+    position: "relative",
+    fontFamily: "Arial, Helvetica, sans-serif",
+  },
+});
+
+App.defaultProps = {
+  isLoggedIn: false,
+  logOut: () => {
+    return;
+  },
+};
+
 App.propTypes = {
   isLoggedIn: PropTypes.bool,
   logOut: PropTypes.func,
-};
-App.defaultProps = {
-  isLoggedIn: false,
-  logOut: () => { },
 };
 
 export default App;
